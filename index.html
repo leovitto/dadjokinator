@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dadjokinator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>hello
+    </h1>
+    <h1>welcome to the dadjokinator</h1>
+    <p id="joke"></p>
+    <button onclick="fetchJoke()" id="jokeBtn"></button>
+    <p id="numJokes"></p>
+    <button onclick="reset()">reset</button>
+</body>
+<script>
+    let defaultJoke = "why did the chicken cross the road? to get to the idiot's house<br><br>knock knock <br><b>who's there?</b> <br>the chicken"
+    const jokeParagraph = document.getElementById('joke');
+    jokeParagraph.innerHTML = defaultJoke
+
+
+    let counter = parseInt(sessionStorage.getItem("counter"))
+    if (!counter) {
+        counter = 1
+    }
+    const numJokesParagraph = document.getElementById('numJokes')
+    numJokesParagraph.innerHTML = `you have gotten ${counter} dad jokes`
+
+    let fetchJoke = async () => {
+        const response = await fetch('https://icanhazdadjoke.com/', {
+            headers: { 'Accept': 'application/json' }
+        });
+        const json = await response.json()
+        jokeParagraph.innerHTML = json.joke
+        counter = counter + 1
+        sessionStorage.setItem("counter", counter)
+        numJokesParagraph.innerHTML = `you have gotten ${counter} dad jokes`
+    }
+    let reset = () => {
+        counter = 1
+        sessionStorage.setItem("counter", counter)
+        numJokesParagraph.innerHTML = `you have gotten ${counter} dad jokes`
+        jokeParagraph.innerHTML = defaultJoke
+    }
+</script>
+</html>
